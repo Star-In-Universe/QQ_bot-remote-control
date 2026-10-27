@@ -1,0 +1,69 @@
+# ============================================================================
+# qqbot 配置文件
+#
+# 复制一份为 config.toml，然后按下面注释修改。改完可以先运行：
+#   python -m qqbot --check
+# 检查无误后再正式启动：
+#   python -m qqbot
+# ============================================================================
+
+[onebot]
+# NapCat 的 HTTP 服务端地址（NapCat 默认端口 3000）
+api_base = "http://127.0.0.1:3000"
+# NapCat「HTTP 服务端」里设置的 Token，必须完全一致
+api_token = "REPLACE_ME"
+
+# 本程序监听地址。保持 127.0.0.1 即可，不要改成 0.0.0.0。
+listen_host = "127.0.0.1"
+listen_port = 3001
+webhook_path = "/onebot"
+# NapCat「HTTP 客户端」里填的上报 Token，必须完全一致
+webhook_token = "REPLACE_ME"
+
+[access]
+# 允许使用机器人的 QQ 号，可以写多个。不在名单里的消息一律忽略。
+owner_ids = [123456789]
+# 允许使用的群号；留空表示只在私聊里工作。
+group_ids = []
+# 群里是否必须 @ 机器人才回应
+require_at = true
+
+[llm]
+# DeepSeek API Key。也可以不写，改用环境变量 DEEPSEEK_API_KEY。
+api_key = ""
+base_url = "https://api.deepseek.com"
+# 2026 年可用的模型名：deepseek-flash 或 deepseek-v4-pro
+model = "deepseek-flash"
+max_tokens = 4096
+temperature = 0.7
+timeout_seconds = 180
+# 每个会话保留多少条历史消息（用户+助手各算一条）
+max_history_messages = 16
+
+[admin]
+# 远程控制口令。至少 12 位，建议 24 位以上随机字符。
+# 生成方法（PowerShell）：
+#   -join ((48..57)+(65..90)+(97..122) | Get-Random -Count 32 | % {[char]$_})
+secret = "REPLACE_WITH_LONG_RANDOM_SECRET"
+# 解锁后有效期（分钟）
+ttl_minutes = 30
+# 是否允许在群里使用高危命令（不建议）
+allow_group_admin = false
+# 每分钟最多尝试几次解锁口令
+max_attempts_per_minute = 5
+
+[agent]
+# 工具的相对路径基准目录。"." 表示本配置文件所在目录。
+workspace = "."
+# 单次任务最多调用多少轮工具
+max_tool_rounds = 8
+# 单条 PowerShell 命令最长执行时间（秒）
+command_timeout_seconds = 120
+# 回传给模型的单次工具输出上限（字符）
+max_output_chars = 12000
+# 同一用户两条聊天消息的最小间隔（秒），防止刷屏
+min_reply_interval_seconds = 1.5
+# 是否把截图发给模型分析。
+# true：你可以问“屏幕上是什么”，但截图内容会上传到 DeepSeek；
+# false：截图只发给你，模型看不到画面，也无法描述屏幕内容。
+analyze_screenshots = true
